@@ -1,14 +1,15 @@
-\documentclass[12pt, letterpaper]{article}
+\documentclass[10pt, letterpaper]{article}
 
 % Packages:
-\usepackage{geometry}
-\geometry{
-    a4paper,
-    top=1.0cm,
-    bottom=1.1cm,
-    left=2cm,
-    right=2cm
-}
+\usepackage[
+    ignoreheadfoot, % set margins without considering header and footer
+    top=1 cm, % seperation between body and page edge from the top
+    bottom=1 cm, % seperation between body and page edge from the bottom
+    left=2 cm, % seperation between body and page edge from the left
+    right=2 cm, % seperation between body and page edge from the right
+    footskip=1.0 cm, % seperation between body and footer
+    % showframe % for debugging 
+]{geometry} % for adjusting page geometry
 \usepackage[explicit]{titlesec} % for customizing section titles
 \usepackage{tabularx} % for making tables with fixed width columns
 \usepackage{array} % tabularx requires this
@@ -18,8 +19,8 @@
 \usepackage{fontawesome5} % for using icons
 \usepackage{amsmath} % for math
 \usepackage[
-    pdftitle={SanthoshRaj's CV},
-    pdfauthor={Santhosh},
+    pdftitle={Suresh's CV},
+    pdfauthor={Suresh},
     pdfcreator={LaTeX with RenderCV},
     colorlinks=true,
     urlcolor=primaryColor
@@ -37,6 +38,7 @@
 % Ensure that generate pdf is machine readable/ATS parsable:
 \ifPDFTeX
     \input{glyphtounicode}
+   
     \usepackage[T1]{fontenc}
     \usepackage[utf8]{inputenc}
     \usepackage{lmodern}
@@ -46,32 +48,44 @@
 
 % Some settings:
 \AtBeginEnvironment{adjustwidth}{\partopsep0pt} % remove space before adjustwidth environment
-\pagestyle{empty}
+\pagestyle{empty} % no header or footer
 \setcounter{secnumdepth}{0} % no section numbering
 \setlength{\parindent}{0pt} % no indentation
 \setlength{\topskip}{0pt} % no top skip
 \setlength{\columnsep}{0.15cm} % set column seperation
 \makeatletter
-\let\ps@customFooterStyle\ps@empty % Set the custom footer style to empty
+\let\ps@customFooterStyle\ps@plain % Copy the plain style to customFooterStyle
+% \patchcmd{\ps@customFooterStyle}{\thepage}{
+%     \color{gray}\textit{\small John Doe - Page \thepage{} of \pageref*{LastPage}}
+}{}{} % replace number by desired string
 \makeatother
 \pagestyle{customFooterStyle}
 
 \titleformat{\section}{
+    % avoid page braking right after the section title
     \needspace{4\baselineskip}
+    % make the font size of the section title large and color it with the primary color
     \Large\color{primaryColor}
 }{
 }{
 }{
+    % print bold title, give 0.15 cm space and draw a line of 0.8 pt thickness
+    % from the end of the title to the end of the body
     \textbf{#1}\hspace{0.15cm}\titlerule[0.8pt]\hspace{-0.1cm}
-}[]
+}[] % section title formatting
 
 \titlespacing{\section}{
+    % left space:
     -1pt
 }{
+    % top space:
     0.3 cm
 }{
+    % bottom space:
     0.2 cm
-}
+} % section title spacing
+
+% \renewcommand\labelitemi{$\vcenter{\hbox{\small$\bullet$}}$} % custom bullet points
 \newenvironment{highlights}{
     \begin{itemize}[
         topsep=0.10 cm,
@@ -82,7 +96,8 @@
     ]
 }{
     \end{itemize}
-}
+} % new environment for highlights
+
 \newenvironment{highlightsforbulletentries}{
     \begin{itemize}[
         topsep=0.10 cm,
@@ -93,7 +108,9 @@
     ]
 }{
     \end{itemize}
-}
+} % new environment for highlights for bullet entries
+
+
 \newenvironment{onecolentry}{
     \begin{adjustwidth}{
         0.2 cm + 0.00001 cm
@@ -102,7 +119,8 @@
     }
 }{
     \end{adjustwidth}
-}
+} % new environment for one column entries
+
 \newenvironment{twocolentry}[2][]{
     \onecolentry
     \def\secondColumn{#2}
@@ -112,7 +130,8 @@
     \switchcolumn \raggedleft \secondColumn
     \end{paracol}
     \endonecolentry
-}
+} % new environment for two column entries
+
 \newenvironment{threecolentry}[3][]{
     \onecolentry
     \def\thirdColumn{#3}
@@ -123,12 +142,14 @@
     \switchcolumn \raggedleft \thirdColumn
     \end{paracol}
     \endonecolentry
-}
+} % new environment for three column entries
+
 \newenvironment{header}{
     \setlength{\topsep}{0pt}\par\kern\topsep\centering\color{primaryColor}\linespread{1.5}
 }{
     \par\kern\topsep
-}
+} % new environment for the header
+
 \newcommand{\placelastupdatedtext}{% \placetextbox{<horizontal pos>}{<vertical pos>}{<stuff>}
   \AddToShipoutPictureFG*{% Add <stuff> to current page foreground
     \put(
@@ -139,8 +160,14 @@
     }}}%
   }%
 }%
+
+% save the original href command in a new command:
 \let\hrefWithoutArrow\href
+
+% new command for external links:
 \renewcommand{\href}[2]{\hrefWithoutArrow{#1}{\ifthenelse{\equal{#2}{}}{ }{#2 }\raisebox{.15ex}{\footnotesize \faExternalLink*}}}
+
+
 \begin{document}
     \newcommand{\AND}{\unskip
         \cleaders\copy\ANDbox\hskip\wd\ANDbox
@@ -148,8 +175,9 @@
     }
     \newsavebox\ANDbox
     \sbox\ANDbox{}
+
     \placelastupdatedtext
-    \begin{header}
+  \begin{header}
         \fontsize{30 pt}{30 pt}
         \textbf{Santhosh Raj K}
 
@@ -164,57 +192,167 @@
 \end{center}
 
   \end{header}
-% Summary Section:
-\section{Professional Summary}
-Entry-level Python developer with a strong foundation in full-stack development, specializing in Django frameworks and familiar with Flask. Skilled in crafting efficient web applications and experienced in database management with MySQL. Focused on delivering innovative solutions aligned with modern web development standards.
 
-% Education Section:
-\section{Education}
-\textbf{Bachelor of Computer Applications (BCA)} \hfill \textit{Aug 2021 -- Jun 2024}\\
-Agurchand Manmull Jain College, Chennai, India \hfill \textbf{CGPA: 8.3/10}
+    \vspace{0.3 cm - 0.3 cm}
 
-\textbf{Higher Secondary Certificate (HSC)} \hfill \textit{Jun 2020 -- Apr 2021}\\
-St. John’s Matriculation Higher Secondary School, Chennai \hfill \textbf{Percentage: 76\%}
 
-\textbf{Secondary School Leaving Certificate (SSLC)} \hfill \textit{Jun 2018 -- Apr 2019}\\
-St. John’s Matriculation Higher Secondary School, Chennai \hfill \textbf{Percentage: 69\%}
+    \section{Summary}
 
-% Internships Section:
-\section{Internships}
-\textbf{Shiash Info Solutions Private Limited} \hfill \textit{May 2024 -- Jul 2024}\\
-\textit{Role: Python Django Developer}\
-\begin{itemize}[leftmargin=*]
-    \item Designed and implemented web applications using Django framework.
+
+
+        
+        \begin{onecolentry}
+Entry-level Python developer with expertise in full-stack development, skilled in Django and Flask frameworks. Proficient in building web applications and managing MySQL databases, with a focus on innovative solutions and modern standards.
+        \end{onecolentry}
+    
+    % \section{Quick Guide}
+
+    % \begin{onecolentry}
+    %     \begin{highlightsforbulletentries}
+
+
+    %     \item Each section title is arbitrary and each section contains a list of entries.
+
+    %     \item There are 7 unique entry types: \textit{BulletEntry}, \textit{TextEntry}, \textit{EducationEntry}, \textit{ExperienceEntry}, \textit{NormalEntry}, \textit{PublicationEntry}, and \textit{OneLineEntry}.
+
+    %     \item Select a section title, pick an entry type, and start writing your section!
+
+    %     \item \href{https://docs.rendercv.com/user_guide/}{Here}, you can find a comprehensive user guide for RenderCV.
+
+
+    %     \end{highlightsforbulletentries}
+    % \end{onecolentry}
+
+    \section{Education}
+
+
+
+        
+        \begin{threecolentry}{\textbf{BCA}}{
+            Aug 2021 – Jun 2024
+        }
+        \textbf{Bachelor of Computer Applications}
+            
+            \text{Agurchand Manmull Jain College, Mennambakkam, Chennai, Tamil Nadu.} 
+            \begin{highlights}
+                \item CGPA: 8.3/10 
+               
+           \vspace{0.2cm}
+        \end{threecolentry}
+          \begin{threecolentry}{\textbf{HSC}}{
+            Jun 2020 – Apr 2021
+        }
+        
+            
+            \text{St. John’s Matriculation Higher Secondary School, Chennai.} 
+            \begin{highlights}
+                \item Percentage: 76\% 
+               \vspace{0.2cm}
+           
+        \end{threecolentry}
+          \begin{threecolentry}{\textbf{SSLC}}{
+            Jun 2018 – Apr 2019
+        }
+        
+            
+            \text{St. John’s Matriculation Higher Secondary School, Chennai.} 
+            \begin{highlights}
+                \item Percentage: 69\%
+               
+           
+        \end{threecolentry}
+
+
+
+
+    
+    \section{Internships}
+\vspace{0.2 cm}
+          \begin{twocolentry}{
+
+        May 2024 - July 2024
+        }
+            \textbf{
+Shiash Info Solutions Private Limited, Sholinganallur, Chennai, Tamil Nadu.
+}
+            \begin{highlights}
+            \textbf{Role: Python Django Developer}
+                   \item Designed and implemented web applications using Django framework.
     \item Integrated MySQL for robust data management.
-\end{itemize}
+                
+            \end{highlights}
+        \end{twocolentry}
+         \vspace{0.2 cm}
 
-% Projects Section:
-\section{Projects}
-\textbf{Aluminium-Pro} \hfill \href{https://aluminium-pro.onrender.com}{aluminium-pro.onrender.com}\
-\begin{itemize}[leftmargin=*]
-    \item Simplified aluminum industry processes through a custom web solution.
-    \item Leveraged Django, MySQL, HTML, CSS, and JavaScript.
-    \item Deployed on Render for scalable, real-world usage.
-\end{itemize}
 
-\textbf{Portfolio Website} \hfill \href{https://santhoshdev-seven.vercel.app}{santhoshdev-seven.vercel.app}\
-\begin{itemize}[leftmargin=*]
-    \item Built a personal portfolio with smooth UI transitions and animations.
-    \item Used Next.js, Tailwind CSS, Shadcn, and deployed on Vercel.
-\end{itemize}
+        
+   
+       
+    \section{Projects}
 
-% Skills Section:
-\section{Full Stack Skills}
-\textbf{Programming Languages:} Python, HTML, CSS, JavaScript\\
-\textbf{Frameworks:} Django, Flask, React\\
-\textbf{Databases:} MySQL, SQLite3\\
-\textbf{Tools:} GitHub, Canva, Visual Studio Code, Postman, Render
 
-% Achievements Section:
-\section{Achievements}
-\begin{itemize}[leftmargin=*]
-    \item \faCertificate \textbf{Department Topper (2021-2024)}: Ranked 1st for 2 consecutive years.
-    \item \faTrophy \textbf{Intra-College Fest (BIT-SYNC) (2024)}: Recognized for exemplary event organization.
-\end{itemize}
 
+        
+        \begin{twocolentry}{
+            \href{https://santhoshdev-seven.vercel.app}{https://santhoshdev-seven.vercel.app}
+        }
+            \textbf{Portfolio Website}
+            \begin{highlights}
+                 \item Built a personal portfolio with smooth UI transitions and animations.
+    \item Skills Used: Next.js, Tailwind CSS, Shadcn, and Vercel.
+            \end{highlights}
+        \end{twocolentry}
+
+
+        \vspace{0.2 cm}
+   \begin{twocolentry}{
+            \href{https://aluminium-pro.onrender.com/}{aluminium-pro.onrender.com/}
+        }
+            \textbf{Aluminium-Pro}
+            \begin{highlights}
+                \item Built and deployed Aluminium Pro, a web solution focused on simplifying aluminum industry processes, leveraging web technologies and scalable deployment on Render.
+                \item Skills Used: HTML, CSS, Javascript, Python, Django, My SQL.
+            \end{highlights}
+        \end{twocolentry}
+
+
+        \vspace{0.2 cm}
+
+        
+
+
+    
+    \section{Fullstack Development Skills}
+
+
+
+        
+        \begin{onecolentry}
+            \textbf{Languages:} Python, HTML, CSS, Javascript.
+        \end{onecolentry}
+
+        \vspace{0.2cm}
+        \begin{onecolentry}
+            \textbf{Frameworks:} Flask, Django, React.
+        \end{onecolentry}
+
+        \vspace{0.2cm}
+
+        \begin{onecolentry}
+            \textbf{Database}:} My SQL, Sqlite3.
+            \end{onecolentry}
+
+        \vspace{0.2cm}
+        \begin{onecolentry}
+                
+                
+            \textbf{Tools:} GitHub, Canva, Visual Studio Code, Postman, Render.
+        \end{onecolentry}
+        \vspace{0.2cm} 
+        \section{Achievements}
+        \begin{highlights}
+                \item \faCertificate \textbf{Department Topper (2021-2024)}: Ranked 1st for 2 consecutive years.
+            \vspace{0.3cm}
+    \item \faTrophy \textbf{Intra-College Fest (BIT-SYNC) (2024)}: Recognized for exemplary event organization
+            \end{highlights}
 \end{document}
